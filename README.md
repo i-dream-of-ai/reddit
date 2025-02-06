@@ -138,12 +138,14 @@ Add to your Zed settings.json:
 
 ## Examples of Questions
 
-- "What are the current hot posts on Reddit's frontpage"
-- "What are the hot posts in the r/ClaudeAI subreddit"
-- "Tell me about the r/ClaudeAI subreddit"
-- "Who are the moderators of r/ClaudeAI"
-- "Show me the top comments on this Reddit post: [post_url]"
-- "Get the full content and discussion of this Reddit post: [post_url]"
+- "What are the current hot posts on Reddit's frontpage?" (get_frontpage_posts)
+- "Tell me about the r/ClaudeAI subreddit" (get_subreddit_info)
+- "What are the hot posts in the r/ClaudeAI subreddit?" (get_subreddit_hot_posts)
+- "Show me the newest posts from r/ClaudeAI" (get_subreddit_new_posts)
+- "What are the top posts of all time in r/ClaudeAI?" (get_subreddit_top_posts)
+- "What posts are trending in r/ClaudeAI right now?" (get_subreddit_rising_posts)
+- "Get the full content and comments of this Reddit post: [post_url]" (get_post_content)
+- "Summarize the comments on this Reddit post: [post_url]" (get_post_comments)
 
 ## Debugging
 
