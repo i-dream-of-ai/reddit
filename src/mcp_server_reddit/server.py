@@ -20,7 +20,6 @@ class RedditTools(str, Enum):
     GET_FRONTPAGE_POSTS = "get_frontpage_posts"
     GET_SUBREDDIT_INFO = "get_subreddit_info"
     GET_POST_COMMENTS = "get_post_comments"
-    GET_SUBREDDIT_MODS = "get_subreddit_mods"
     GET_SUBREDDIT_HOT_POSTS = "get_subreddit_hot_posts"
     GET_POST_CONTENT = "get_post_content"
 
@@ -150,13 +149,6 @@ class RedditServer:
                 comments.append(comment)
         return comments
 
-    def get_subreddit_mods(self, subreddit_name: str) -> list[Moderator]:
-        """Get moderators of a subreddit"""
-        mods = []
-        for mod in self.client.p.moderation.pull_users.moderators(subreddit_name):
-            mods.append(Moderator(name=mod.name))
-        return mods
-
     def get_subreddit_hot_posts(self, subreddit_name: str, limit: int = 10) -> list[Post]:
         """Get hot posts from a specific subreddit"""
         posts = []
@@ -235,20 +227,6 @@ async def serve() -> None:
                 }
             ),
             Tool(
-                name=RedditTools.GET_SUBREDDIT_MODS.value,
-                description="Get moderators of a subreddit",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "subreddit_name": {
-                            "type": "string",
-                            "description": "Name of the subreddit (e.g. 'Python', 'news')",
-                        }
-                    },
-                    "required": ["subreddit_name"]
-                }
-            ),
-            Tool(
                 name=RedditTools.GET_SUBREDDIT_HOT_POSTS.value,
                 description="Get hot posts from a specific subreddit",
                 inputSchema={
@@ -322,12 +300,6 @@ async def serve() -> None:
                         raise ValueError("Missing required argument: post_id")
                     limit = arguments.get("limit", 10)
                     result = reddit_server.get_post_comments(post_id, limit)
-
-                case RedditTools.GET_SUBREDDIT_MODS.value:
-                    subreddit_name = arguments.get("subreddit_name")
-                    if not subreddit_name:
-                        raise ValueError("Missing required argument: subreddit_name")
-                    result = reddit_server.get_subreddit_mods(subreddit_name)
 
                 case RedditTools.GET_SUBREDDIT_HOT_POSTS.value:
                     subreddit_name = arguments.get("subreddit_name")

@@ -10,6 +10,19 @@ This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interac
   - Optional arguments:
     - `limit` (integer): Number of posts to return (default: 10, range: 1-1000)
 
+- `get_subreddit_hot_posts` - Get hot posts from a specific subreddit
+  - Required arguments:
+    - `subreddit_name` (string): Name of the subreddit (e.g. 'ClaudeMind', 'ClaudeAI')
+  - Optional arguments:
+    - `limit` (integer): Number of posts to return (default: 10, range: 1-1000)
+
+- `get_post_content` - Get detailed content of a specific post
+  - Required arguments:
+    - `post_id` (string): ID of the post
+  - Optional arguments:
+    - `comment_limit` (integer): Number of top-level comments to return (default: 10, range: 1-1000)
+    - `comment_depth` (integer): Maximum depth of comment tree (default: 3, range: 1-10)
+
 - `get_subreddit_info` - Get information about a subreddit
   - Required arguments:
     - `subreddit_name` (string): Name of the subreddit (e.g. 'Python', 'news')
@@ -20,22 +33,6 @@ This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interac
   - Optional arguments:
     - `limit` (integer): Number of comments to return (default: 10, range: 1-1000)
 
-- `get_subreddit_mods` - Get moderators of a subreddit
-  - Required arguments:
-    - `subreddit_name` (string): Name of the subreddit (e.g. 'Python', 'news')
-
-- `get_subreddit_hot_posts` - Get hot posts from a specific subreddit
-  - Required arguments:
-    - `subreddit_name` (string): Name of the subreddit (e.g. 'Python', 'news')
-  - Optional arguments:
-    - `limit` (integer): Number of posts to return (default: 10, range: 1-1000)
-
-- `get_post_content` - Get detailed content of a specific post
-  - Required arguments:
-    - `post_id` (string): ID of the post
-  - Optional arguments:
-    - `comment_limit` (integer): Number of top-level comments to return (default: 10, range: 1-1000)
-    - `comment_depth` (integer): Maximum depth of comment tree (default: 3, range: 1-10)
 
 ## Installation
 
