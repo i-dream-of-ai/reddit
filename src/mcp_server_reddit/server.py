@@ -19,9 +19,12 @@ class PostType(str, Enum):
 class RedditTools(str, Enum):
     GET_FRONTPAGE_POSTS = "get_frontpage_posts"
     GET_SUBREDDIT_INFO = "get_subreddit_info"
-    GET_POST_COMMENTS = "get_post_comments"
     GET_SUBREDDIT_HOT_POSTS = "get_subreddit_hot_posts"
+    GET_SUBREDDIT_NEW_POSTS = "get_subreddit_new_posts"
+    GET_SUBREDDIT_TOP_POSTS = "get_subreddit_top_posts"
+    GET_SUBREDDIT_RISING_POSTS = "get_subreddit_rising_posts"
     GET_POST_CONTENT = "get_post_content"
+    GET_POST_COMMENTS = "get_post_comments"
 
 
 class SubredditInfo(BaseModel):
@@ -139,20 +142,31 @@ class RedditServer:
             replies=replies
         )
 
-    def get_post_comments(self, post_id: str, limit: int = 10) -> list[Comment]:
-        """Get comments from a post"""
-        comments = []
-        tree_node = self.client.p.comment_tree.fetch(post_id, sort='top', limit=limit)
-        for node in tree_node.children:
-            comment = self._build_comment_tree(node)
-            if comment:
-                comments.append(comment)
-        return comments
-
     def get_subreddit_hot_posts(self, subreddit_name: str, limit: int = 10) -> list[Post]:
         """Get hot posts from a specific subreddit"""
         posts = []
         for subm in self.client.p.subreddit.pull.hot(subreddit_name, limit):
+            posts.append(self._build_post(subm))
+        return posts
+
+    def get_subreddit_new_posts(self, subreddit_name: str, limit: int = 10) -> list[Post]:
+        """Get new posts from a specific subreddit"""
+        posts = []
+        for subm in self.client.p.subreddit.pull.new(subreddit_name, limit):
+            posts.append(self._build_post(subm))
+        return posts
+
+    def get_subreddit_top_posts(self, subreddit_name: str, limit: int = 10, time: str = '') -> list[Post]:
+        """Get top posts from a specific subreddit"""
+        posts = []
+        for subm in self.client.p.subreddit.pull.top(subreddit_name, limit, time=time):
+            posts.append(self._build_post(subm))
+        return posts
+
+    def get_subreddit_rising_posts(self, subreddit_name: str, limit: int = 10) -> list[Post]:
+        """Get rising posts from a specific subreddit"""
+        posts = []
+        for subm in self.client.p.subreddit.pull.rising(subreddit_name, limit):
             posts.append(self._build_post(subm))
         return posts
 
@@ -165,6 +179,16 @@ class RedditServer:
         comments = self.get_post_comments(post_id, comment_limit)
         
         return PostDetail(post=post, comments=comments)
+
+    def get_post_comments(self, post_id: str, limit: int = 10) -> list[Comment]:
+        """Get comments from a post"""
+        comments = []
+        tree_node = self.client.p.comment_tree.fetch(post_id, sort='top', limit=limit)
+        for node in tree_node.children:
+            comment = self._build_comment_tree(node)
+            if comment:
+                comments.append(comment)
+        return comments
 
 
 async def serve() -> None:
@@ -186,7 +210,7 @@ async def serve() -> None:
                             "description": "Number of posts to return (default: 10)",
                             "default": 10,
                             "minimum": 1,
-                            "maximum": 1000
+                            "maximum": 100
                         }
                     }
                 }
@@ -206,27 +230,6 @@ async def serve() -> None:
                 }
             ),
             Tool(
-                name=RedditTools.GET_POST_COMMENTS.value,
-                description="Get comments from a post",
-                inputSchema={
-                    "type": "object",
-                    "properties": {
-                        "post_id": {
-                            "type": "string",
-                            "description": "ID of the post",
-                        },
-                        "limit": {
-                            "type": "integer",
-                            "description": "Number of comments to return (default: 10)",
-                            "default": 10,
-                            "minimum": 1,
-                            "maximum": 1000
-                        }
-                    },
-                    "required": ["post_id"]
-                }
-            ),
-            Tool(
                 name=RedditTools.GET_SUBREDDIT_HOT_POSTS.value,
                 description="Get hot posts from a specific subreddit",
                 inputSchema={
@@ -241,7 +244,76 @@ async def serve() -> None:
                             "description": "Number of posts to return (default: 10)",
                             "default": 10,
                             "minimum": 1,
-                            "maximum": 1000
+                            "maximum": 100
+                        }
+                    },
+                    "required": ["subreddit_name"]
+                }
+            ),
+            Tool(
+                name=RedditTools.GET_SUBREDDIT_NEW_POSTS.value,
+                description="Get new posts from a specific subreddit",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "subreddit_name": {
+                            "type": "string",
+                            "description": "Name of the subreddit (e.g. 'Python', 'news')",
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "description": "Number of posts to return (default: 10)",
+                            "default": 10,
+                            "minimum": 1,
+                            "maximum": 100
+                        }
+                    },
+                    "required": ["subreddit_name"]
+                }
+            ),
+            Tool(
+                name=RedditTools.GET_SUBREDDIT_TOP_POSTS.value,
+                description="Get top posts from a specific subreddit",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "subreddit_name": {
+                            "type": "string",
+                            "description": "Name of the subreddit (e.g. 'Python', 'news')",
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "description": "Number of posts to return (default: 10)",
+                            "default": 10,
+                            "minimum": 1,
+                            "maximum": 100
+                        },
+                        "time": {
+                            "type": "string",
+                            "description": "Time filter for top posts (e.g. 'hour', 'day', 'week', 'month', 'year', 'all')",
+                            "default": "",
+                            "enum": ["", "hour", "day", "week", "month", "year", "all"]
+                        }
+                    },
+                    "required": ["subreddit_name"]
+                }
+            ),
+            Tool(
+                name=RedditTools.GET_SUBREDDIT_RISING_POSTS.value,
+                description="Get rising posts from a specific subreddit",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "subreddit_name": {
+                            "type": "string",
+                            "description": "Name of the subreddit (e.g. 'Python', 'news')",
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "description": "Number of posts to return (default: 10)",
+                            "default": 10,
+                            "minimum": 1,
+                            "maximum": 100
                         }
                     },
                     "required": ["subreddit_name"]
@@ -262,7 +334,7 @@ async def serve() -> None:
                             "description": "Number of top-level comments to return (default: 10)",
                             "default": 10,
                             "minimum": 1,
-                            "maximum": 1000
+                            "maximum": 100
                         },
                         "comment_depth": {
                             "type": "integer",
@@ -270,6 +342,27 @@ async def serve() -> None:
                             "default": 3,
                             "minimum": 1,
                             "maximum": 10
+                        }
+                    },
+                    "required": ["post_id"]
+                }
+            ),
+            Tool(
+                name=RedditTools.GET_POST_COMMENTS.value,
+                description="Get comments from a post",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "post_id": {
+                            "type": "string",
+                            "description": "ID of the post",
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "description": "Number of comments to return (default: 10)",
+                            "default": 10,
+                            "minimum": 1,
+                            "maximum": 100
                         }
                     },
                     "required": ["post_id"]
@@ -294,19 +387,34 @@ async def serve() -> None:
                         raise ValueError("Missing required argument: subreddit_name")
                     result = reddit_server.get_subreddit_info(subreddit_name)
 
-                case RedditTools.GET_POST_COMMENTS.value:
-                    post_id = arguments.get("post_id")
-                    if not post_id:
-                        raise ValueError("Missing required argument: post_id")
-                    limit = arguments.get("limit", 10)
-                    result = reddit_server.get_post_comments(post_id, limit)
-
                 case RedditTools.GET_SUBREDDIT_HOT_POSTS.value:
                     subreddit_name = arguments.get("subreddit_name")
                     if not subreddit_name:
                         raise ValueError("Missing required argument: subreddit_name")
                     limit = arguments.get("limit", 10)
                     result = reddit_server.get_subreddit_hot_posts(subreddit_name, limit)
+
+                case RedditTools.GET_SUBREDDIT_NEW_POSTS.value:
+                    subreddit_name = arguments.get("subreddit_name")
+                    if not subreddit_name:
+                        raise ValueError("Missing required argument: subreddit_name")
+                    limit = arguments.get("limit", 10)
+                    result = reddit_server.get_subreddit_new_posts(subreddit_name, limit)
+
+                case RedditTools.GET_SUBREDDIT_TOP_POSTS.value:
+                    subreddit_name = arguments.get("subreddit_name")
+                    if not subreddit_name:
+                        raise ValueError("Missing required argument: subreddit_name")
+                    limit = arguments.get("limit", 10)
+                    time = arguments.get("time", "")
+                    result = reddit_server.get_subreddit_top_posts(subreddit_name, limit, time)
+
+                case RedditTools.GET_SUBREDDIT_RISING_POSTS.value:
+                    subreddit_name = arguments.get("subreddit_name")
+                    if not subreddit_name:
+                        raise ValueError("Missing required argument: subreddit_name")
+                    limit = arguments.get("limit", 10)
+                    result = reddit_server.get_subreddit_rising_posts(subreddit_name, limit)
 
                 case RedditTools.GET_POST_CONTENT.value:
                     post_id = arguments.get("post_id")
@@ -315,6 +423,13 @@ async def serve() -> None:
                     comment_limit = arguments.get("comment_limit", 10)
                     comment_depth = arguments.get("comment_depth", 3)
                     result = reddit_server.get_post_content(post_id, comment_limit, comment_depth)
+
+                case RedditTools.GET_POST_COMMENTS.value:
+                    post_id = arguments.get("post_id")
+                    if not post_id:
+                        raise ValueError("Missing required argument: post_id")
+                    limit = arguments.get("limit", 10)
+                    result = reddit_server.get_post_comments(post_id, limit)
 
                 case _:
                     raise ValueError(f"Unknown tool: {name}")
