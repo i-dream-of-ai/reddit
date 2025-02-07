@@ -5,6 +5,11 @@ A Model Context Protocol server providing access to Reddit public API for LLMs. 
 
 This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interact with Reddit's public API and exposes the functionality through MCP protocol.
 
+## Video Demo
+
+[![MCP Server Reddit - ClaudeMind](https://img.youtube.com/vi/1Gdx1jWFbCM/maxresdefault.jpg)](https://youtu.be/1Gdx1jWFbCM)
+
+
 ## Available Tools
 
 - `get_frontpage_posts` - Get hot posts from Reddit frontpage
