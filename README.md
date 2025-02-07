@@ -1,4 +1,5 @@
 # MCP Server Reddit
+[![smithery badge](https://smithery.ai/badge/@Hawstein/mcp-server-reddit)](https://smithery.ai/server/@Hawstein/mcp-server-reddit)
 
 A Model Context Protocol server providing access to Reddit public API for LLMs. This server enables LLMs to interact with Reddit's content, including browsing frontpage posts, accessing subreddit information, and reading post comments.
 
@@ -54,6 +55,14 @@ This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interac
 
 
 ## Installation
+
+### Installing via Smithery
+
+To install MCP Server Reddit for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Hawstein/mcp-server-reddit):
+
+```bash
+npx -y @smithery/cli install @Hawstein/mcp-server-reddit --client claude
+```
 
 ### Using uv (recommended)
 
