@@ -5,7 +5,9 @@ A Model Context Protocol server providing access to Reddit public API for LLMs. 
 
 This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interact with Reddit's public API and exposes the functionality through MCP protocol.
 
-## Video Demo
+## Video Demo (Click to Watch)
+
+A demo in ClaudeMind 👇
 
 [![MCP Server Reddit - ClaudeMind](https://img.youtube.com/vi/1Gdx1jWFbCM/maxresdefault.jpg)](https://youtu.be/1Gdx1jWFbCM)
 
@@ -61,13 +63,15 @@ This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interac
 
 ## Installation
 
-### Installing via Smithery
+### Using [ClaudeMind](https://claudemind.com/) (recommended)
 
-To install MCP Server Reddit for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Hawstein/mcp-server-reddit):
+The easiest way to use MCP Server Reddit is through the ClaudeMind desktop app. Simply download and install ClaudeMind, then:
 
-```bash
-npx -y @smithery/cli install @Hawstein/mcp-server-reddit --client claude
-```
+1. Open the ClaudeMind app
+2. Navigate to the Servers page
+3. Find mcp-server-reddit and click Install
+
+That's it! No technical knowledge required - ClaudeMind handles all the installation and configuration for you seamlessly.
 
 ### Using uv (recommended)
 
@@ -86,6 +90,14 @@ After installation, you can run it as a script using:
 
 ```bash
 python -m mcp_server_reddit
+```
+
+### Installing via Smithery
+
+To install MCP Server Reddit for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Hawstein/mcp-server-reddit):
+
+```bash
+npx -y @smithery/cli install @Hawstein/mcp-server-reddit --client claude
 ```
 
 ## Configuration
