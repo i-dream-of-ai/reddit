@@ -5,6 +5,8 @@ A Model Context Protocol server providing access to Reddit public API for LLMs. 
 
 This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interact with Reddit's public API and exposes the functionality through MCP protocol.
 
+<a href="https://glama.ai/mcp/servers/4032xr14pu"><img width="380" height="200" src="https://glama.ai/mcp/servers/4032xr14pu/badge" alt="Server Reddit MCP server" /></a>
+
 ## Video Demo (Click to Watch)
 
 A demo in ClaudeMind 👇
