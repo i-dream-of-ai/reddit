@@ -9,9 +9,9 @@ This server uses [redditwarp](https://github.com/Pyprohly/redditwarp) to interac
 
 ## Video Demo (Click to Watch)
 
-A demo in ClaudeMind 👇
+A demo in Clinde 👇
 
-[![MCP Server Reddit - ClaudeMind](https://img.youtube.com/vi/1Gdx1jWFbCM/maxresdefault.jpg)](https://youtu.be/1Gdx1jWFbCM)
+[![MCP Server Reddit - Clinde](https://img.youtube.com/vi/1Gdx1jWFbCM/maxresdefault.jpg)](https://youtu.be/1Gdx1jWFbCM)
 
 
 ## Available Tools
@@ -65,15 +65,15 @@ A demo in ClaudeMind 👇
 
 ## Installation
 
-### Using [ClaudeMind](https://claudemind.com/) (recommended)
+### Using [Clinde](https://clinde.ai/) (recommended)
 
-The easiest way to use MCP Server Reddit is through the ClaudeMind desktop app. Simply download and install ClaudeMind, then:
+The easiest way to use MCP Server Reddit is through the Clinde desktop app. Simply download and install Clinde, then:
 
-1. Open the ClaudeMind app
+1. Open the Clinde app
 2. Navigate to the Servers page
 3. Find mcp-server-reddit and click Install
 
-That's it! No technical knowledge required - ClaudeMind handles all the installation and configuration for you seamlessly.
+That's it! No technical knowledge required - Clinde handles all the installation and configuration for you seamlessly.
 
 ### Using uv (recommended)
 
